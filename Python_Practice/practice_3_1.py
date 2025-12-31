@@ -1,14 +1,14 @@
 #실습 3-1: 이메일 주소 분리하기
-# email_address = input("이메일 주소를 입력하세요... : ")
-# print(f"사용자 이름: {email_address.split('@')[0]}")
-# print(f"도메인: {email_address.split('@')[1]}")
+email_address = input("이메일 주소를 입력하세요... : ")
+print(f"사용자 이름: {email_address.split('@')[0]}")
+print(f"도메인: {email_address.split('@')[1]}")
 
 #실습 3-2: 비밀번호 길이 검사
-# password = input("사용할 비밀번호를 입력하세요... : ")
-# if len(password) >= 8:
-#     print(f"유효한 비밀번호입니다. ")
-# else:
-#     print(f"비밀번호가 8자리 이하입니다. 다시 만드세요.")
+password = input("사용할 비밀번호를 입력하세요... : ")
+if len(password) >= 8:
+    print(f"유효한 비밀번호입니다. ")
+else:
+    print(f"비밀번호가 8자리 이하입니다. 다시 만드세요.")
 
 #실습 3-3: 3의 배수 찾기
 result_list = []
@@ -45,3 +45,4 @@ for i, j in scores.items():
         max_score = j
         max_name = i
 print(f"제일 잘한 학생 : {max_name} 이고, 점수는 {max_score}")
+# 엇비슷한듯?
