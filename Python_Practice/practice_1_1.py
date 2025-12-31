@@ -69,4 +69,4 @@ elif prac8_oper == "//":
 print(f"계산 결과 : {prac8_num1} {prac8_oper} {prac8_num2} = {prac8_result}")
 
 # 해설을 보니, 0으로 나누는 경우 예외처리 / 잘못된 연산자를 입력한 경우 예외처리 두가지가 있었다.
-# Pycharm에서 Git 연동해서 Push 테스트를 진행하자.
+# Pycharm에서 Git 연동해서 Push 테스트를 진행하자. 왜 안되지?
