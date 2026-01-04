@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-01-01 10:05:00",
+    "level": "ERROR",
+    "message": "DB 연결 실패"
+  },
+  {
+    "timestamp": "2025-01-01 10:15:00",
+    "level": "ERROR",
+    "message": "타임아웃 발생"
+  }
+]
