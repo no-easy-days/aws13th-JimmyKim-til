@@ -1,11 +1,13 @@
 #실습 3-1: 이메일 주소 분리하기
 email_address = input("이메일 주소를 입력하세요... : ")
-if "@" not in email_address:
+#if "@" not in email_address:
+if "@" not in email_address or email_address.count("@")!=1:
     raise ValueError("이메일 형식이 맞지 않습니다. @ 가 없습니다. ")
 print(f"사용자 이름: {email_address.split('@')[0]}")
 print(f"도메인: {email_address.split('@')[1]}")
 # 피드백 반영 --- 2026.01.06
 # 이메일 주소 형식이 아닐 경우 걸러내는 로직 구현
+# count 함수 써서 @ 갯수도 확인하는 로직 추가
 
 
 #실습 3-2: 비밀번호 길이 검사
