@@ -93,8 +93,8 @@ def prac3(source_file_path, target_file_path):
                     break
                 d.write(chunk)
                 copied_size += len(chunk) # 파일 사이즈 진행율 확인용. 굳이 여기선 안써도될듯
-        d.close()
-    f.close()
+    #    d.close() 피드백 반영 -- 2026.01.06 굳이 필요없다.
+    #f.close() 피드백 반영 -- 2026.01.06 굳이 필요없다.
     target_size = os.path.getsize(target_file_path)
     print(file_size)
     print(target_size)
