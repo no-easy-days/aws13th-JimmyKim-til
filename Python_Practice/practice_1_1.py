@@ -60,11 +60,28 @@ elif prac8_oper == "-":
 elif prac8_oper == "*":
     prac8_result = float(prac8_num1) * float(prac8_num2)
 elif prac8_oper == "%":
+    if prac8_num2 == 0:
+        print(f"0으로 나누면 나머지를 구할 수 없습니다. ")
+        raise ZeroDivisionError
     prac8_result = float(prac8_num1) % float(prac8_num2)
 elif prac8_oper == "/":
     prac8_result = float(prac8_num1) / float(prac8_num2)
+    if prac8_num2 == 0:
+        print(f"0으로 나눗셈을 할 수 없습니다. ")
+        raise ZeroDivisionError
 elif prac8_oper == "//":
     prac8_result = float(prac8_num1) // float(prac8_num2)
+    if prac8_num2 == 0:
+        print(f"0으로 나누면 몫을 구할 수 없습니다. ")
+        raise ZeroDivisionError
+else:
+    print(f"오류가 발생했습니다. 지원하지 않는 연산자입니다. ")
+    raise ValueError
+
+# 피드백 반영 --- 2026.01.06
+# 1. 방어 로직 구현하기 (잘못된 연산자 검출)
+# 2. 제로 나누기 예외 처리
+
 
 print(f"계산 결과 : {prac8_num1} {prac8_oper} {prac8_num2} = {prac8_result}")
 
