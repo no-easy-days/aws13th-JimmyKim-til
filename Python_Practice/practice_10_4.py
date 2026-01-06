@@ -22,7 +22,8 @@ age = input("나이: ")
 name = input("이름: ")
 age = input("나이: ")
 # Placeholder 활용
-sql = "INSERT INTO students VALUES (%d, %s)"
+# 피드백 반영 -- 2026.01.06 %d는 정수형!
+sql = "INSERT INTO students VALUES (%s, %s)"
 cursor.execute(sql, (name, age))
 # Placeholder 이름 기반 %(key)s 활용
 sql = "INSERT INTO students VALUES (%(name)s, %(age)s)"
