@@ -14,6 +14,23 @@ def calculator(a, b, operator):
     elif operator not in operator_example:
         return "지원하지 않는 연산자입니다."
 
+# 피드백 내용 구현(람다식 활용) -- 2026.01.06
+def calculator_lambda(a, b, operator):
+    # 딕셔너리 자료형을 선언하고, 연산자를 키값으로 받아서 결과값을 람다식으로 반환하네.
+    # 창의적이다...
+    operations = {
+        '+': lambda a, b: a + b,
+        '-': lambda a, b: a - b,
+        '*': lambda a, b: a * b,
+        '/': lambda a, b: a / b if b != 0 else "0으로 나눌 수 없습니다"
+    }
+    result = operations.get(operator)
+
+    if result is None:
+        return "지원하지 않는 연산자입니다"
+    return result(a, b)
+
+print(calculator_lambda(10,5,'+'))
 print(calculator(10, 5, '+'))  # 15
 print(calculator(10, 5, '-'))  # 5
 print(calculator(10, 5, '*'))  # 50
@@ -48,27 +65,34 @@ def validate_password(password):
     if len(password) < 8:
         return (False, "8자 이상이어야 합니다")
 
-    has_digit = False
-    for char in password:
-        if char.isdigit():
-            has_digit = True
-            break
+    # has_digit = False
+    # for char in password:
+    #     if char.isdigit():
+    #         has_digit = True
+    #         break
 
+    # 피드백 내용 반영 -- 2026.01.05
+    # 제너레이터 표현식 & any를 활용하였다.
+    has_digit = any(char.isdigit() for char in password)
     if not has_digit:
         return (False, "숫자를 포함해야 합니다")
 
     # 조건 3: 대문자 포함
-    has_upper = False
-    for char in password:
-        if char.isupper():
-            has_upper = True
-            break
+    # has_upper = False
+    # for char in password:
+    #     if char.isupper():
+    #         has_upper = True
+    #         break
 
+    # 피드백 내용 반영 -- 2026.01.05
+    # 제너레이터 표현식 & any를 활용하였다.
+    has_upper = any(char.isupper() for char in password)
     if not has_upper:
         return (False, "대문자를 포함해야 합니다")
 
     # 모든 조건 통과
     return (True, "유효한 비밀번호입니다")
+# 훨씬 간결해졌다.
 
 print(validate_password("abc"))        # (False, "8자 이상이어야 합니다")
 print(validate_password("abcdefgh"))   # (False, "숫자를 포함해야 합니다")
