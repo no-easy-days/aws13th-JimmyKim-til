@@ -53,8 +53,13 @@ class TodoList:
 
     def show_tasks(self):
     # 풀이 : 예시 처럼 나와야 해서 순번을 부여해주자.
+    # 피드백 내용 반영 -- 2026.01.06
+    # task 가 없을 때 방어 로직 구현
+        if not self.tasks:
+            print("해야할 일이 없습니다. ")
+            return None
         print(f"---해야하는 Todo_list---")
-        for i, task in enumerate(self.tasks):
+        for i, task in enumerate(self.tasks, 1):
             print(f"{i+1}번 : {task}")
 #        print(f"{self.tasks}")
 
