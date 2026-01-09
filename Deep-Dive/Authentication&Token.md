@@ -20,8 +20,11 @@
 - 서버는 단순히 응답만을 수행한다.
 - **모든 정보는 클라이언트가 가지고 있다**가, 서버 통신 시 데이터를 실어 보낸다.
 - Stateful에 비해 더 많은 데이터가 소모된다.
+- <img width="832" height="411" alt="딥다이브2_Stateless의이해_TCPvsUDP" src="https://github.com/user-attachments/assets/a27259ef-3eaa-4ec6-a393-721de4ef462c" />
+
 
 ### 2. Cookie
+- <img width="861" height="463" alt="딥다이브2_쿠키인증방식" src="https://github.com/user-attachments/assets/cf95f2a3-15b5-49b1-9a99-25aba40d21db" />
 - **클라이언트의 브라우저에 설치되는 기록 정보 파일.**
 > Key & Value 쌍 문자열의 덩어리로 이루어져있다.
 
@@ -35,6 +38,7 @@
     - 보안 취약 (Request할때 쿠키 그대로 담기 때문에)
 
 ### 3. Session
+- <img width="762" height="793" alt="딥다이브2_세션인증방식" src="https://github.com/user-attachments/assets/237395d2-3456-445a-9fae-b73ad3f5465b" />
 - Cookie의 보안 취약성으로, **민감한 Authentication 정보를 서버 측에서 저장 & 관리**
 - **Cookie와 함께 사용**된다. (서버로 Request할 때, Session ID를 Cookie에 담아서 전송)
 > Key(Session ID) & Value(다양한 속성들) 쌍 문자열의 덩어리로 이루어져있다. (Cookie와 형태는 동일)
@@ -46,6 +50,7 @@
 
 
 ### 4. Token
+- <img width="753" height="688" alt="딥다이브2_JWT토큰인증방식" src="https://github.com/user-attachments/assets/50352313-fa03-43c7-9d4b-ee414ddf772a" />
 - Stateless를 유지하며 동시에 Authorization 상태를 유지하기 위한 기술
 - 토큰은 **클라이언트에 저장**, 서버의 부담을 줄일 수 있음.
 
@@ -59,6 +64,8 @@
 - Authentication을 암호화 시킨 JSON 형태의 토큰. 여기서 "JWT 기반 인증" 이라는 말이 나옴.
 - JSON 데이터를 **Base64 URL-safe Encode 를 통해 인코딩 & Serialization** 한 것
 - `.`을 구분자로 사용하고, **Header(헤더), Payload(본문), Signature(전자서명)** 부분로 구성
+- <img width="752" height="53" alt="딥다이브2_JWT의구조_2" src="https://github.com/user-attachments/assets/1fd158fe-dc73-4093-a11f-ea6ad7e9dae8" />
+
 
 #### 1) 구성 요소
 - **A) Header** : type 정보와 Hash 알고리즘 종류
