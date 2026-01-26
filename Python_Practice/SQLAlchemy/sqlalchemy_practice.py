@@ -2,10 +2,11 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, Session, relationship
 
 #=======================================================
-#1. 데이터베이스 엔진 생성
+#1. 데이터베이스 엔진 생성 ---- 2026.01.26 IP 정보 숨기기
 #=======================================================
 engine = create_engine(
-    "mysql+pymysql://kjhappy77:Fg6wL4cV9nY3kRpZ@180.69.158.131:3397/schema_kjhappy77", echo=True
+    "mysql+pymysql://root:1234@localhost:3306/orm_practice",
+    echo=True  # SQL 로그 출력
 )
 # ======================================================
 # 2. ORM_BASE Class 생성
