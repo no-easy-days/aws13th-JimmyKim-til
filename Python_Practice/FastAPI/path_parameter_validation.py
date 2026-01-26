@@ -39,7 +39,7 @@ async def get_subject_id(
         subject_id : Annotated[int, Path(ge=1, le=10)],
         score : Annotated[float, Query(ge=0, le= 100)],
         bonus : Annotated[float | None, Query(ge=1, le=9)] = None,
-)
+):
     total = score + (bonus or 0)
     result = {
         "subject_id": subject_id,
