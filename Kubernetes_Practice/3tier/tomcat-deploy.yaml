@@ -1,0 +1,84 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tomcat-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /shared/tomcat
+    server: 211.183.3.100
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tomcat-pv-claim
+  labels:
+    app: tomcat
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: tomcat
+    tier: was
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  replicas: 2 #   
+  selector:
+    matchLabels:
+      app: tomcat
+      tier: was
+  template:
+    metadata:
+      labels:
+        app: tomcat
+        tier: was
+    spec:
+      containers:
+      - name: tomcat-container
+        image: 61.254.18.30:5000/tomcat:latest
+        volumeMounts:
+        - name: index-config
+          mountPath: /usr/local/tomcat/webapps/ROOT/index.jsp
+          subPath: index.jsp
+        - name: jdbc-driver
+          mountPath: /usr/local/tomcat/lib/mysql-connector-java-8.0.23.jar
+          subPath: mysql-connector-java-8.0.23.jar
+      volumes:
+      - name: index-config
+        configMap:
+          name: tomcat-configmap
+          items:
+          - key: index.jsp
+            path: index.jsp
+      - name: jdbc-driver
+        persistentVolumeClaim:
+          claimName: tom-pv-claim

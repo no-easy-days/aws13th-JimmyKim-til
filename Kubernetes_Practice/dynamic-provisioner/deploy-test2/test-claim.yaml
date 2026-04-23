@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fast
+spec:
+  storageClassName: jimmy-storageclass-fast
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: slow
+spec:
+  storageClassName: jimmy-storageclass-slow
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi

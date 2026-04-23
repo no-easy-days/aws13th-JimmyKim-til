@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: mysql
+    image: 61.254.18.30:5000/mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "password"
+    readinessProbe:
+      exec:
+        command: ["mysqladmin", "ping", "-ppassword"]
+      initialDelaySeconds: 5
+      periodSeconds: 3

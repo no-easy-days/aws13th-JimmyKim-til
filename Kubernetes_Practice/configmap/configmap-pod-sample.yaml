@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod-env
+spec:
+  containers:
+  - name: my-container
+    image: public.ecr.aws/docker/library/httpd:alpine
+    env:
+    - name: USERNAME
+      valueFrom:
+        configMapKeyRef:
+          name: info
+          key: username
+    - name: DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: info
+          key: db_host

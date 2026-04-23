@@ -118,3 +118,4 @@ UPDATE products SET stock = stock + 5 WHERE category = '전자기기';
 USE schema_kjhappy77;
 SELECT * FROM users;
 SELECT u.name, p.title FROM schema_kjhappy77.users u INNER JOIN schema_kjhappy77.posts p ON u.id = p.user_id;
+

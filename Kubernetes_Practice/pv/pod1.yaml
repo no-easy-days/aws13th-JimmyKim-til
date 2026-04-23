@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-pod1
+spec:
+  containers:
+  - name: nfs-con
+    image: 61.254.18.30:5000/ipnginx
+    volumeMounts:
+    - name: nfs-vol
+      mountPath: /remote
+  volumes:
+  - name: nfs-vol
+    persistentVolumeClaim:
+      claimName: nfs-pvc1

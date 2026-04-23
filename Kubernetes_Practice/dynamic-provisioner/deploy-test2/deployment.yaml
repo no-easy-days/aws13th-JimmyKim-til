@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jimmy-fast-and-slow
+  labels:
+    app: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: 
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner-container-fast
+          image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          volumeMounts:
+            - name: nfs-client-root-fast
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: jimmy-dynamicprovisioner-fast
+            - name: NFS_SERVER
+              value: 211.183.3.100
+            - name: NFS_PATH
+              value: /shared/pv/fast
+
+        - name: nfs-client-provisioner-container-slow
+          image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          volumeMounts:
+            - name: nfs-client-root-slow
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: jimmy-dynamicprovisioner-slow
+            - name: NFS_SERVER
+              value: 211.183.3.100
+            - name: NFS_PATH
+              value: /shared/pv/slow
+     
+      volumes:
+        - name: nfs-client-root-fast
+          nfs:
+            server: 211.183.3.100
+            path: /shared/pv/fast
+
+        - name: nfs-client-root-slow
+          nfs:
+            server: 211.183.3.100
+            path: /shared/pv/slow
+

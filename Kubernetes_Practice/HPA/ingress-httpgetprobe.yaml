@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-healthz-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: ilove.k8s.com 
+      http:
+        paths:
+        - path: /web
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-healthz-service 
+              port:
+                number: 80 # 

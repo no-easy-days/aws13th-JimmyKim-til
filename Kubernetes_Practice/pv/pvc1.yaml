@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc1
+spec:
+  accessModes:
+    - ReadWriteMany          #***** have to be set as same as pv
+  resources:
+    requests:
+      storage: 1Gi           #***** have to be set less than pv's maximum storage 

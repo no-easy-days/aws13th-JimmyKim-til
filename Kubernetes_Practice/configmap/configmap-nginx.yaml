@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: conf
+  namespace: default
+
+data:
+  nginx.conf: |
+    12345
+    12345
+    12345
+    12345
+    asdqw
+ 

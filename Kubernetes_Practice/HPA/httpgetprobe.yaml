@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-healthz-configmap
+  namespace: default
+data:
+  default.conf: |
+    server {
+      listen      80;
+      listen [::]:80;
+      server_name localhost;
+      
+      location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+      }
+
+      location /healthz {
+      return 301 /;
+      }
+
+      error_page  500 502 503 504 /50x.html;
+      location = /50x.html {
+          root  /usr/share/nginx/html;
+      }
+    }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-healthz-service
+spec:
+  selector:
+    app: nginx-healthz
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-deployment-practice
+
+spec:
+  replicas: 3
+  
+  selector:
+    matchLabels:
+      app: nginx-healthz
+  
+  template:
+    metadata:
+      labels:
+        app: nginx-healthz
+  
+    spec:
+      containers:
+      - name: nginx-container
+        image: 61.254.18.30:5000/nginx
+        volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+        resources:
+          requests:
+            cpu: "10m"
+          limits:
+            cpu: "20m"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          periodSeconds: 5
+          initialDelaySeconds: 2
+
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-healthz-configmap
+          items:
+          - key: default.conf
+            path: default.conf
+

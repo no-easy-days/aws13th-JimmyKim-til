@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prac2
+  labels:
+    app: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner-container
+          image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          volumeMounts:
+            - name: fast
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: fast
+            - name: NFS_SERVER
+              value: 211.183.3.100
+            - name: NFS_PATH
+              value: /shared/pv/fast
+      volumes:
+        - name: fast
+          nfs:
+            server: 211.183.3.100
+            path: /share/pv/fast

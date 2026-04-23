@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-tolerations-prac2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-prac2
+  template:
+    metadata:
+      labels:
+        app: nginx-prac2
+    spec:
+      containers:
+      - name: my-container
+        image: 61.254.18.30:5000/ipnginx
+      tolerations:
+      - key: "disktype"
+        operator: "Equal"
+        value: "ssd"
+        effect: "NoSchedule"

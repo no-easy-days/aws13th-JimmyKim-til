@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-tolerations-prac2-hdd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: my-container
+        image: 61.254.18.30:5000/ipnginx
+      tolerations:
+      - key: "disktype"
+        operator: "Equal"
+        value: "hdd"
+        effect: "NoSchedule"

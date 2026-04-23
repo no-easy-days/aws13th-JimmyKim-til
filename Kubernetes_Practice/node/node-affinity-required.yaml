@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-aff-required
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-httpd
+  template:
+    metadata:
+      labels:
+        app: my-httpd
+    spec:
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+                - key: gpu
+                  operator: In
+                  values:
+                    - 'false' 
+      containers: 
+        - name: httpd-pod-con
+          image: 61.254.18.30:5000/ipnginx
