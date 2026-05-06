@@ -185,30 +185,6 @@ spec:
 kubectl apply -f argocd-app-prod.yaml
 ```
 
-EKS B (staging) Application:
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: board-app-staging
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/<계정>/<gitops-repo>
-    targetRevision: main
-    path: manifests/board-app/overlays/staging
-  destination:
-    server: <EKS-B-SERVER-URL>   # argocd cluster list에서 확인
-    namespace: board-app-eks
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-```
-
 ---
 
 ## 5. App of Apps 패턴 (여러 클러스터 한 번에 관리 목적)
@@ -218,6 +194,7 @@ spec:
 EKS 클러스터 3개를 연동해야하는 상황이었기 때문에, argoCD가 구동되는 주요 클러스터에 가장 상위 argoCD App을 생성하고, <br>
 실제 운영환경용 클러스터에 배포할 App 리스트를 명시한 yaml 파일 / 나머지 2개의 클러스터에 배포할 App 리스트를 명시할 yaml 파일을 작성했다.
 
+- 가장 상위 Application
 ```yaml
 # argocd-app-of-apps.yaml
 apiVersion: argoproj.io/v1alpha1
@@ -238,6 +215,81 @@ spec:
     automated:
       prune: true
       selfHeal: true
+```
+
+- 각 클러스터 별 Application
+```yaml
+#EKS A (prod) Application:
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: board-app-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kjhappy77/aws13th-K8s-Project.git
+    targetRevision: main
+    path: manifests/board-app/overlays/prod   # 확인
+  destination:
+    server: https://kubernetes.default.svc   # 가장 메인이 되기 때문에 여기서 local로 선언함
+    namespace: board-app-eks
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+
+
+#EKS B (staging) Application:
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: board-app-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<계정>/<gitops-repo>
+    targetRevision: main
+    path: manifests/board-app/overlays/staging  # 확인
+  destination:
+    server: <EKS-B-SERVER-URL>   # argocd cluster list에서 확인
+    namespace: board-app-eks
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+#EKS C (DR) Application:
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: board-app-dr
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<계정>/<gitops-repo>
+    targetRevision: main
+    path: manifests/board-app/overlays/dr  # 확인
+  destination:
+    server: <EKS-C-SERVER-URL>   # argocd cluster list에서 확인
+    namespace: board-app-eks
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
 ```
 
 ---
