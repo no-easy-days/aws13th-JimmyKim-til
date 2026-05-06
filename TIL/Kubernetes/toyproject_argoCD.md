@@ -229,7 +229,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kjhappy77/aws13th-K8s-Project.git
+    repoURL: https://github.com/<계정>/<gitops-repo>
     targetRevision: main
     path: manifests/board-app/overlays/prod   # 확인
   destination:
