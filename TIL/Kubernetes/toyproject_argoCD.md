@@ -213,7 +213,7 @@ spec:
 
 ## 5. App of Apps 패턴 (여러 클러스터 한 번에 관리 목적)
 
-***“ArgoCD로 ArgoCD를 관리한다.”***
+***“ArgoCD로 ArgoCD를 관리한다.”*** <br>
 여러 개의 Application 리소스를 하나의 상위 Application으로 묶어서 GitOps 방식으로 관리함. <br>
 EKS 클러스터 3개를 연동해야하는 상황이었기 때문에, argoCD가 구동되는 주요 클러스터에 가장 상위 argoCD App을 생성하고, <br>
 실제 운영환경용 클러스터에 배포할 App 리스트를 명시한 yaml 파일 / 나머지 2개의 클러스터에 배포할 App 리스트를 명시할 yaml 파일을 작성했다.
