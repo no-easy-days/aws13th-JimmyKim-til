@@ -153,37 +153,7 @@ argocd app create board-app-prod \
 ```
 
 - 이 방법도 있긴하지만, 기록이 남지 않다보니... 언제나 `yaml` 파일을 통해 진행하는 것이 안전하다.
-
-
-### 방법 2 - yaml로 생성 (권장)
-
-```yaml
-# argocd-app-prod.yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: board-app-prod
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/<계정>/<gitops-repo>
-    targetRevision: main
-    path: manifests/board-app/overlays/prod
-  destination:
-    server: https://kubernetes.default.svc   # EKS A (로컬)
-    namespace: board-app-eks
-  syncPolicy:
-    automated:
-      prune: true       # Git에서 삭제된 리소스 자동 제거
-      selfHeal: true    # 수동 변경 감지 시 자동 복구
-    syncOptions:
-      - CreateNamespace=true
-```
-
-```bash
-kubectl apply -f argocd-app-prod.yaml
-```
+- 클러스터 여러개를 관리해야 하는 상황에서는 보통 아래 `App-of-Apps` 패턴을 활용해서 yaml 파일을 구성한다.
 
 ---
 
