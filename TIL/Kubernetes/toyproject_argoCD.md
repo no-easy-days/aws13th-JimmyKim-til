@@ -213,7 +213,7 @@ spec:
 
 ## 5. App of Apps 패턴 (여러 클러스터 한 번에 관리 목적)
 
-실제 배포하고 싶은 Application 소스코드를 관리하기 위한 argoCD 구성을 위한 상위 개념의 Application을 선언함. 
+각 클러스터 별로 배포할 argoCD를 더 상위 계층에서 관리하기 위한 argoCD Application을 생성한다.
 
 ```yaml
 # argocd-app-of-apps.yaml
