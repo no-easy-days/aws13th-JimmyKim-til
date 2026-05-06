@@ -214,8 +214,8 @@ spec:
 ## 5. App of Apps 패턴 (여러 클러스터 한 번에 관리 목적)
 
 ***“ArgoCD로 ArgoCD를 관리한다.”***
-여러 개의 Application 리소스를 하나의 상위 Application으로 묶어서 GitOps 방식으로 관리함.
-👉 루트 Application 하나에서 - Application들을 배포하는 App
+여러 개의 Application 리소스를 하나의 상위 Application으로 묶어서 GitOps 방식으로 관리함. <br>
+👉 루트 Application 하나에서 - Application들을 배포하는 App <br>
 👉 하위 Application `yaml`들을 Git에서 읽어서 생성 - 실제 서비스들
 
 
