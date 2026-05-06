@@ -1,8 +1,6 @@
 # ArgoCD GitOps 연동 과정
+- Toy-Project에서 진행한, EKS에 배포된 어플리케이션을 ArgoCD로 `GitOps` 방식으로 관리하기 위한 과정
 
-Toy-Project에서 진행한, EKS에 배포된 어플리케이션을 ArgoCD로 `GitOps` 방식으로 관리하기 위한 과정
-
----
 
 ## 전체 흐름
 
