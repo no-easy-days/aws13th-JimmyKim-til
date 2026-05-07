@@ -54,6 +54,7 @@ jobs:                                        # 작업을 선언할게
         run: |
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
+      # ★★★★가장 중요한 부분!!! CI의 핵심★★★★
       - name: Checkout Deployment Repository      # 대상을 소스코드에서 배포용 레포지토리로 변경 액션
         uses: actions/checkout@v4
         with:
@@ -61,7 +62,7 @@ jobs:                                        # 작업을 선언할게
           ref: main                               # 대상 branch 이름
           token: ${{ secrets.GH_PAT_TOKEN }}      # 이름 매핑 주의!!!
 
-      - name: k8s Deployment manifest update      # 변경된 대상 레포지토리에 있는 Manifest 업데이트 액션 ★★★★가장 중요한 부분★★★★
+      - name: k8s Deployment manifest update      # 변경된 대상 레포지토리에 있는 Manifest 업데이트 액션 
         run:  |
           sed -i "s@ \
           image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:.*@ \
