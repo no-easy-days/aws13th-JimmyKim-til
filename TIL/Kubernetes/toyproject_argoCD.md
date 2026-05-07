@@ -99,6 +99,9 @@ ArgoCD CLI 설치:
 curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x argocd && mv argocd /usr/local/bin/
 
+# 명령어 자동완성 적용
+argocd completion bash > /etc/bash_completion.d/argocd
+
 # CLI 로그인
 argocd login <ARGOCD_SERVER_URL> --username admin --password <패스워드> --insecure
 ```
