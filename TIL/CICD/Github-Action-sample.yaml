@@ -54,7 +54,7 @@ jobs:                                        # 작업을 선언할게
         run: |
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # ★★★★가장 중요한 부분!!! CI의 핵심★★★★
+#----------  ★★★★가장 중요한 부분!!! CI의 핵심★★★★  ----------
       - name: Checkout Deployment Repository      # 대상을 소스코드에서 배포용 레포지토리로 변경 액션
         uses: actions/checkout@v4
         with:
