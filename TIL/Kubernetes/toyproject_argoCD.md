@@ -88,8 +88,7 @@ kubectl patch svc argocd-server -n argocd \
   -p '{"spec": {"type": "LoadBalancer"}}'
 
 # 초기 admin 패스워드 확인
-kubectl get secret argocd-initial-admin-secret -n argocd \
-  -o jsonpath='{.data.password}' | base64 -d
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
 # URL 확인
 kubectl get svc argocd-server -n argocd
