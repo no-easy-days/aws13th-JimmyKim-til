@@ -1,0 +1,79 @@
+name: github action for fastAPI              # Workflow 이름
+
+on:                                          # 언제 action을 동작시킬까?
+  push:                                      # push가 됐을때 동작시켜라
+    branches: [main]                         # 대상 브랜치 (main), 바꿔도 됨
+    paths-ignore:                            # push 이벤트가 발생해도 무시할 파일들 리스트업
+    - '.gitignore'
+    - '.dockerignore'
+
+jobs:                                        # 작업을 선언할게
+  ci:                                        # ci 라는 이름으로. (변경해도 됨)
+    runs-on: ubuntu-latest                   # Github Action이 동작하는 실행 환경. 제일 무난한게 Unbuntu니까
+    steps:
+      - name: Load Recent Commit             # 가장 최근 Commit 불러오기 액션
+        uses: actions/checkout@v4            # Repository를 빌드 서버(Runner)로 통째로 복사해오는 모듈. 
+        with:
+          fetch-depth: 1                     # Commit 히스토리 중 가장 최신 거만 가져온다
+          ref: main                               # 대상 branch 이름 (없어도 됨. 브랜치 딸꺼면 쓰고)
+          token: ${{ secrets.GH_PAT_TOKEN }}      # 필요시 token 지정(내 레포가 아닐 경우 필요할 수 있음)
+
+
+      - name: Configure AWS credentials      # AWS 자격 증명 로그인 액션 (EKS, ECR 연동할 것이기 때문에 필요)
+        uses: aws-actions/configure-aws-credentials@v2  # AWS 명령어 치는 모듈
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Github Secret에서 불러옴
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }} # 이름 일치!
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR              # AWS ECR 로그인 액션
+        id: login-ecr                          # 이 id 값을 가지고 환경 변수로 선언할 값을 가져옴 
+        uses: aws-actions/amazon-ecr-login@v2  
+
+      - name: Set Variables                    # 환경변수 선언 액션. 하드코딩을 피하기 위해.
+        id: set-var
+        run: |
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+          echo "ECR_REPOSITORY=jimmy-fastapi" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ github.run_number }}" >> $GITHUB_ENV
+          echo "GIT_EMAIL=kjhappy77@gmail.com" >> $GITHUB_ENV
+          echo "GIT_NAME=kjhappy77" >> $GITHUB_ENV
+        # GITHUB_ENV 라는 변수에 저장하면, "env"로 호출 가능해진다!! 
+        # steps.login-ecr.outputs.registry : 전 단계의 id값으로 레지스트리 이름 불러옴. 
+        # github.run_number : Github Action에서 제공하는 시퀀스 넘버.
+        #        └ argoCD에서 Manifest의 변경 사항을 인지할 수 있게 하는 트리거 역할.
+
+      - name: Docker Image Build               # 컨테이너 이미지 빌드 액션
+        id: build-image
+        run: |
+          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
+        # 환경변수(GITHUB_ENV)에 저장했던 값 중에 필요한 것을 들고온다.
+
+      - name: Docker image Push                # 컨테이너 이미지 ECR 푸쉬 액션
+        id: push-image
+        run: |
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Checkout Deployment Repository      # 대상을 소스코드에서 배포용 레포지토리로 변경 액션
+        uses: actions/checkout@v4
+        with:
+          repository: <Manifest 저장된 배포용 Repo주소>    # Manifest가 저장되어있는 배포용 레포지토리 매핑
+          ref: main                               # 대상 branch 이름
+          token: ${{ secrets.GH_PAT_TOKEN }}      # 이름 매핑 주의!!!
+
+      - name: k8s Deployment manifest update      # 변경된 대상 레포지토리에 있는 Manifest 업데이트 액션
+        run:  |
+          sed -i "s@ \
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:.*@ \
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}@g" .<배포용 yaml경로>
+      # sed s ~ g 텍스트 편집기를 활용했다.
+      # argoCD가 바라보는 레포지토리에서, 대상 Manifest 파일 이름과 경로를 잘 매핑해야함!!
+      # Service Manifest 파일은 딱히 안해도된다. 빌드 과정이 없는 Manifest 파일이니까.
+
+      - name: Commit and Push                     # 변경사항 커밋 푸쉬 액션
+        run: |
+          git config user.email ${{ env.GIT_EMAIL }}
+          git config user.name ${{ env.GIT_NAME }}
+          git add .<배포용 yaml경로>
+          git commit -m "Update image tag by GitHub Action (이건 마음대로 수정해도 되겠지)"
+          git push origin main
