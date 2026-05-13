@@ -5,8 +5,8 @@
 
 module "eks" {
     source = "terraform-aws-modules/eks/aws"
-    version = "21.20.0"
-    # 기본 모듈 불러오기
+    version = "~> 20.0"
+    # 기본 모듈 불러오기, 최신 버전이 문제가 있어서... 일단 20 버전으로 했음
     name = "pub-cluster"
     # 클러스터 이름
     kubernetes_version = "1.35"
