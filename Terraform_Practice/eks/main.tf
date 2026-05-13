@@ -5,15 +5,13 @@
 
 module "eks" {
     source = "terraform-aws-modules/eks/aws"
-    version = "~> 20.0"
+    cluster_version = "1.33"
     # 기본 모듈 불러오기, 최신 버전이 문제가 있어서... 일단 20 버전으로 했음
-    name = "pub-cluster"
+    cluster_name = "pub-cluster"
     # 클러스터 이름
     kubernetes_version = "1.35"
     endpoint_public_access = true
     # 외부에서 kubectl 명령어를 사용할 수 있도록 허용
-    enable_cluster_creator_admin_permissions = true
-    # Optional: Adds the current caller identity as an administrator via cluster access entry
     vpc_id = var.eks-vpc-id
     subnet_ids = [
         var.pub-sub1-id,
@@ -27,7 +25,7 @@ module "eks" {
             min_size = 2
             max_size = 5
             desired_size = 2
-            instance_types = ["t3.micro"]
+            instance_types = ["t3.small"]
             # 리스트 형태로 넣어줌(테라폼 문법)
         }
     }
